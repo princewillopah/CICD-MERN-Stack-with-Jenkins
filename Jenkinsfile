@@ -69,7 +69,7 @@ pipeline {
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
                         dir('AppFiles/backend') {
-                            sh "docker build -t princewillopah/CICD-MERN-Stack-with-Jenkins-Backend:v-1.0.1 ."
+                            sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1 ."
                         }
                     }
                 }
@@ -81,7 +81,7 @@ pipeline {
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
                         dir('AppFiles/frontend') {
-                            sh "docker build -t princewillopah/CICD-MERN-Stack-with-Jenkins-Frontend:v-1.0.1 ."
+                            sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1 ."
                         }
                     }
                 }
@@ -90,13 +90,13 @@ pipeline {
 
         stage("Trivy Image Scan Backend"){
             steps{
-                sh "trivy image --format table -o trivy-backend-image-report.html princewillopah/CICD-MERN-Stack-with-Jenkins-Backend:v-1.0.1" 
+                sh "trivy image --format table -o trivy-backend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1" 
             }
         }
 
         stage("Trivy Image Scan Frontend"){
             steps{
-                sh "trivy image --format table -o trivy-frontend-image-report.html princewillopah/CICD-MERN-Stack-with-Jenkins-Frontend:v-1.0.1" 
+                sh "trivy image --format table -o trivy-frontend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1" 
             }
         }
 
@@ -104,7 +104,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
-                        sh "docker push princewillopah/CICD-MERN-Stack-with-Jenkins-Backend:v-1.0.1"
+                        sh "docker push princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1"
                     }
                 }
             }
@@ -114,7 +114,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
-                        sh "docker push princewillopah/CICD-MERN-Stack-with-Jenkins-Frontend:v-1.0.1"
+                        sh "docker push princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1"
                     }
                 }
             }
@@ -143,3 +143,31 @@ pipeline {
 }
 
 
+
+// pipeline {
+//     agent any
+//         environment {
+//         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+//     }
+//     stages {
+//         stage('Debug') {
+//             steps {
+//                 script {
+//                     sh 'id'
+//                     sh 'groups'
+//                     sh 'docker ps'
+//                 }
+//             }
+//         }
+//                 stage('Docker Login') {
+//             steps {
+//                 script {
+//                     withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
+//                         sh 'docker info'
+//                     }
+//                 }
+//             }
+//         }
+//         // Add your existing stages here
+//     }
+// }

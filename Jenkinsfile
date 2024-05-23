@@ -169,6 +169,9 @@
 // }
 pipeline {
     agent any
+        environment {
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+    }
     stages {
         stage('Debug') {
             steps {
@@ -176,6 +179,15 @@ pipeline {
                     sh 'id'
                     sh 'groups'
                     sh 'docker ps'
+                }
+            }
+        }
+                stage('Docker Login') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
+                        sh 'docker info'
+                    }
                 }
             }
         }

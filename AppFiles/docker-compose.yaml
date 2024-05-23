@@ -1,0 +1,33 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Backend/.env
+    # secrets:
+    #   - mongo_uri
+
+  frontend:
+    build:
+      context: ./Frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
+# secrets:
+#   mongo_uri:
+#     file: ./secrets/mongo_uri.txt

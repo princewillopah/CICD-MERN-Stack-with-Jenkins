@@ -1,0 +1,34 @@
+# Node.js dependencies
+node_modules
+
+# Production build artifacts
+build
+dist
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Docker configuration files
+Dockerfile
+.dockerignore
+
+# Version control directories and files
+.git
+.gitignore
+
+# Environment variables
+.env
+
+# IDE and editor configurations
+.vscode
+.idea
+*.swp
+
+# Coverage reports
+coverage
+*.lcov
+
+# Ignore other specific files or directories
+secret_keys.txt
+private/

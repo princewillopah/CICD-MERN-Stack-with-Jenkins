@@ -68,7 +68,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
-                        dir('AppFiles/backend') {
+                        dir('AppFiles/Backend') {
                             sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1 ."
                         }
                     }
@@ -80,7 +80,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
-                        dir('AppFiles/frontend') {
+                        dir('AppFiles/Frontend') {
                             sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1 ."
                         }
                     }

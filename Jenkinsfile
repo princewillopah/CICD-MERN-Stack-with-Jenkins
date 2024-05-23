@@ -120,15 +120,33 @@ pipeline {
             }
         }
 
-        // stage("Deploy Backend To Dev"){
-        //     steps{
-        //         script{
-        //             withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
-        //                 sh "docker run -d -p 5000:5000 princewillopah/backend:v-1.0.1"
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Deploy Backend To Dev"){
+            steps{
+                script{
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
+                         dir('K8sFiles') {
+                             sh 'kubectl delete --all pods -n webapp'
+                             sh "kubectl apply -f . -n webapp"
+                             sleep 60
+                        }
+                    }
+                }
+            }
+        }
+
+        stage("Verify Deployment"){
+            steps{
+                script{
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
+                         dir('K8sFiles') {
+                             sh 'kubectl get pods -n webapp'
+                              sh 'kubectl get svc -n webapp'
+                             sleep 60
+                        }
+                    }
+                }
+            }
+        }
 
         // stage("Deploy Frontend To Dev"){
         //     steps{

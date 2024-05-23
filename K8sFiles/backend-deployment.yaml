@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: princewillopah/devshack-backend:v1.1.5
+          image: princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1
           ports:
             - containerPort: 5000
           env:

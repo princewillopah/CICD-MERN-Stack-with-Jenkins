@@ -143,27 +143,42 @@
 // }
 
 
+// pipeline {
+//     agent any
+//     environment {
+//         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+//     }
+//     stages {
+//         stage('Test Docker Access') {
+//             steps {
+//                 script {
+//                     sh 'docker ps'
+//                 }
+//             }
+//         }
+//         stage('Docker Login') {
+//             steps {
+//                 script {
+//                     withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
+//                         sh 'docker info'
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
 pipeline {
     agent any
-    environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-    }
     stages {
-        stage('Test Docker Access') {
+        stage('Debug') {
             steps {
                 script {
+                    sh 'id'
+                    sh 'groups'
                     sh 'docker ps'
                 }
             }
         }
-        stage('Docker Login') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: DOCKER_CREDENTIALS_ID) {
-                        sh 'docker info'
-                    }
-                }
-            }
-        }
+        // Add your existing stages here
     }
 }

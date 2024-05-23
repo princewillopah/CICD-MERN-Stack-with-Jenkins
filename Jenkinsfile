@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Git Checkout') { 
             steps {
-                git credentialsId: 'git-credentials', url: 'https://github.com/princewillopah/CICD-MERN-Stack-with-Jenkins'
+                git credentialsId: 'git-credentials', url: 'https://github.com/princewillopah/CICD-MERN-Stack-with-Jenkins.git'
             }
         }
 

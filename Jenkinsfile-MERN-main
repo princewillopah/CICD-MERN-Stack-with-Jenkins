@@ -3,9 +3,9 @@ pipeline {
     tools {
         nodejs "node16"
     }
-    // environment {
-    //     SCANNER_HOME=tool 'sonar-scanner' // define path of sonarqube scanner tool //'sonar-scanner' is the name we specified in tool
-    // }
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner' // define path of sonarqube scanner tool //'sonar-scanner' is the name we specified in tool
+    }
     stages {
         stage('Git Checkout') { 
             steps {
@@ -53,16 +53,16 @@ pipeline {
             }
         }
 
-        // stage('SonarQube') { 
-        //     steps {
-        //         withSonarQubeEnv('sonarqube-server') { 
-        //             sh ''' 
-        //             $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=CICD-MERN-Stack-with-Jenkins \
-        //             -Dsonar.projectKey=CICD-MERN-Stack-with-Jenkins
-        //             '''
-        //         }
-        //     }
-        // }        
+        stage('SonarQube') { 
+            steps {
+                withSonarQubeEnv('sonarqube-server') { 
+                    sh ''' 
+                    $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=CICD-MERN-Stack-with-Jenkins \
+                    -Dsonar.projectKey=CICD-MERN-Stack-with-Jenkins
+                    '''
+                }
+            }
+        }        
         
         stage("Docker Build & Tag Backend"){
             steps{
@@ -120,33 +120,33 @@ pipeline {
             }
         }
 
-        // stage("Deploy Backend To Dev"){
-        //     steps{
-        //         script{
-        //             withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
-        //                  dir('K8sFiles') {
-        //                      sh 'kubectl delete --all pods -n webapp'
-        //                      sh "kubectl apply -f . -n webapp"
-        //                      sleep 60
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Deploy Backend To Dev"){
+            steps{
+                script{
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
+                         dir('K8sFiles') {
+                             sh 'kubectl delete --all pods -n webapp'
+                             sh "kubectl apply -f . -n webapp"
+                             sleep 60
+                        }
+                    }
+                }
+            }
+        }
 
-        // stage("Verify Deployment"){
-        //     steps{
-        //         script{
-        //             withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
-        //                  dir('K8sFiles') {
-        //                      sh 'kubectl get pods -n webapp'
-        //                       sh 'kubectl get svc -n webapp'
-        //                      sleep 60
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        stage("Verify Deployment"){
+            steps{
+                script{
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-eks22', contextName: '', credentialsId: 'kubernetes-credentials', namespace: 'webapp', serverUrl: 'https://ADE8B9FF913B987320A01983C65148DC.gr7.eu-north-1.eks.amazonaws.com']]) {
+                         dir('K8sFiles') {
+                             sh 'kubectl get pods -n webapp'
+                              sh 'kubectl get svc -n webapp'
+                             sleep 60
+                        }
+                    }
+                }
+            }
+        }
 
         // stage("Deploy Frontend To Dev"){
         //     steps{

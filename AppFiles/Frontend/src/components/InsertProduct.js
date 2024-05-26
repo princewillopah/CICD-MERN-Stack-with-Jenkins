@@ -24,6 +24,7 @@ export default function InsertProduct() {
 
     const addProduct = async (e) => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '104.248.193.10:5000';
+        // const backendUrl = process.env.REACT_APP_BACKEND_URL 
         e.preventDefault();
 
         if (!productName || !productPrice || !productBarcode) {

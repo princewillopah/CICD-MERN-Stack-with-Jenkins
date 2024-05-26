@@ -26,6 +26,7 @@ export default function InsertProduct() {
 
     useEffect(() => {
         const getProduct = async () => {
+            // const backendUrl = process.env.REACT_APP_BACKEND_URL 
             const backendUrl = process.env.REACT_APP_BACKEND_URL || '104.248.193.10:5000';
           try {
             const res = await fetch(`http://${backendUrl}/products/${id}`, {
@@ -56,6 +57,7 @@ export default function InsertProduct() {
 
     const updateProduct = async (e) => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '104.248.193.10:5000';
+        // const backendUrl = process.env.REACT_APP_BACKEND_URL 
         e.preventDefault();
 
         if (!productName || !productPrice || !productBarcode) {

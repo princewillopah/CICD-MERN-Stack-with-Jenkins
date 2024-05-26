@@ -123,7 +123,7 @@ export default function Products() {
 
     const getProducts = async () => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '104.248.193.10:5000';
-
+        // const backendUrl = process.env.REACT_APP_BACKEND_URL 
         try {
             const res = await fetch(`http://${backendUrl}/products`, {
                 method: "GET",
@@ -145,7 +145,7 @@ export default function Products() {
 
     const deleteProduct = async (id) => {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || '104.248.193.10:5000';
-
+        // const backendUrl = process.env.REACT_APP_BACKEND_URL 
         try {
             const response = await fetch(`http://${backendUrl}/insertproduct/${id}`, {
                 method: "DELETE",

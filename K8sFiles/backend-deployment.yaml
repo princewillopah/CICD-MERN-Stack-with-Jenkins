@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
-  namespace: webapp
+  namespace: xxx
 spec:
   replicas: 2
   selector:
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1
+          image: princewillopah/new-backend:v2
           ports:
             - containerPort: 5000
           env:

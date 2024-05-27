@@ -15,11 +15,11 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: princewillopah/new-frontend:v2
+          image: princewillopah/new-frontend:v3
           ports:
             - containerPort: 3000
           env:
-            # - name: BACKEND_URL
-            #   value: "104.248.193.10:5000"
+            - name: BACKEND_URL
+              value: "104.248.193.10:5000"
             - name: REACT_APP_BACKEND_URL
               value: "104.248.193.10:5000"           

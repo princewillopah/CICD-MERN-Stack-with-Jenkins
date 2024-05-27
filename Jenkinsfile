@@ -1,25 +1,30 @@
 pipeline {
     agent any
+
+
+
     // tools {
     //     nodejs "node16"
     // }
-    // environment {
-    //     SCANNER_HOME=tool 'sonar-scanner' // define path of sonarqube scanner tool //'sonar-scanner' is the name we specified in tool
-    // }
-    // stages {
-    //     stage('Git Checkout') { 
-    //         steps {
-    //             git credentialsId: 'git-credentials', url: 'https://github.com/princewillopah/CICD-MERN-Stack-with-Jenkins'
-    //         }
-    //     }
 
-    //     stage('Install Backend Dependencies') { 
-    //         steps {
-    //             dir('AppFiles/Backend') {
-    //                 sh "npm install"
-    //             }
-    //         }
-    //     }
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner' // define path of sonarqube scanner tool //'sonar-scanner' is the name we specified in tool
+    }
+
+    stages {
+        stage('Git Checkout') { 
+            steps {
+              git credentialsId: 'github-cred', url: 'https://github.com/princewillopah/CICD-MERN-Stack-with-Jenkins.git'
+            }
+        }
+
+        // stage('Install Backend Dependencies') { 
+        //     steps {
+                // dir('AppFiles/Backend') {
+                    // sh "npm install"
+                // }
+        //     }
+        // }
 
     //     stage('Install Frontend Dependencies') { 
     //         steps {
@@ -53,72 +58,73 @@ pipeline {
     //         }
     //     }
 
-    //     // stage('SonarQube') { 
-    //     //     steps {
-    //     //         withSonarQubeEnv('sonarqube-server') { 
-    //     //             sh ''' 
-    //     //             $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=CICD-MERN-Stack-with-Jenkins \
-    //     //             -Dsonar.projectKey=CICD-MERN-Stack-with-Jenkins
-    //     //             '''
-    //     //         }
-    //     //     }
-    //     // }        
-        
-    //     stage("Docker Build & Tag Backend"){
-    //         steps{
-    //             script{
-    //                 withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
-    //                     dir('AppFiles/Backend') {
-    //                         sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1 ."
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage('SonarQube') { 
+            steps {
+                withSonarQubeEnv('sonar') { 
+                    sh ''' 
+                    $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=CICD-MERN-Stack-with-Jenkins \
+                    -Dsonar.projectKey=CICD-MERN-Stack-with-Jenkins
+                    '''
+                }
 
-    //     stage("Docker Build & Tag Frontend"){
-    //         steps{
-    //             script{
-    //                 withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
-    //                     dir('AppFiles/Frontend') {
-    //                         sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1 ."
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
+            }
+        }        
+  
+        stage("Docker Build & Tag Backend"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
+                        dir('AppFiles/Backend') {
+                            sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-backend:v3 ."
+                        }
+                    }
+                }
+            }
+        }
 
-    //     stage("Trivy Image Scan Backend"){
-    //         steps{
-    //             sh "trivy image --format table -o trivy-backend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1" 
-    //         }
-    //     }
+        stage("Docker Build & Tag Frontend"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){   
+                        dir('AppFiles/Frontend') {
+                            sh "docker build -t princewillopah/cicd-mern-stack-with-jenkins-frontend:v3 ."
+                        }
+                    }
+                }
+            }
+        }
 
-    //     stage("Trivy Image Scan Frontend"){
-    //         steps{
-    //             sh "trivy image --format table -o trivy-frontend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1" 
-    //         }
-    //     }
+        stage("Trivy Image Scan Backend"){
+            steps{
+                sh "trivy image --format table -o trivy-backend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1" 
+            }
+        }
 
-    //     stage("Push Backend To DockerHub"){
-    //         steps{
-    //             script{
-    //                 withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
-    //                     sh "docker push princewillopah/cicd-mern-stack-with-jenkins-backend:v-1.0.1"
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage("Trivy Image Scan Frontend"){
+            steps{
+                sh "trivy image --format table -o trivy-frontend-image-report.html princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1" 
+            }
+        }
 
-    //     stage("Push Frontend To DockerHub"){
-    //         steps{
-    //             script{
-    //                 withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
-    //                     sh "docker push princewillopah/cicd-mern-stack-with-jenkins-frontend:v-1.0.1"
-    //                 }
-    //             }
-    //         }
-    //     }
+        stage("Push Backend To DockerHub"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
+                        sh "docker push princewillopah/cicd-mern-stack-with-jenkins-backend:v3"
+                    }
+                }
+            }
+        }
+
+        stage("Push Frontend To DockerHub"){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub-credentials', toolName: 'docker'){ 
+                        sh "docker push princewillopah/cicd-mern-stack-with-jenkins-frontend:v3"
+                    }
+                }
+            }
+        }
 
     //     stage("Deploy Backend To Dev"){
     //         steps{
@@ -165,8 +171,64 @@ pipeline {
         //         }
         //     }
         // }
-    // }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
